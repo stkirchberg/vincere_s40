@@ -6,12 +6,20 @@ public class Vincere extends MIDlet implements CommandListener {
     private Display display;
     private ChatCanvas canvas;
     private TextBox inputBuffer;
-    private Command sendCommand, backCommand;
-    private String userName = "User";
+    private TextBox loginBuffer;
+    private Command sendCommand, backCommand, joinCommand;
+    private String userName = "Guest";
+    private boolean isLoggedIn = false;
 
     public Vincere() {
         display = Display.getDisplay(this);
         canvas = new ChatCanvas();
+        
+        loginBuffer = new TextBox("Enter Username", "", 15, TextField.ANY);
+        joinCommand = new Command("Join Chat", Command.OK, 1);
+        loginBuffer.addCommand(joinCommand);
+        loginBuffer.setCommandListener(this);
+
         inputBuffer = new TextBox("Message", "", 100, TextField.ANY);
         sendCommand = new Command("Send", Command.OK, 1);
         backCommand = new Command("Back", Command.BACK, 2);
@@ -21,11 +29,22 @@ public class Vincere extends MIDlet implements CommandListener {
     }
 
     protected void startApp() {
-        display.setCurrent(canvas);
+        if (!isLoggedIn) {
+            display.setCurrent(loginBuffer);
+        } else {
+            display.setCurrent(canvas);
+        }
     }
 
     public void commandAction(Command c, Displayable d) {
-        if (c == sendCommand) {
+        if (c == joinCommand) {
+            String typedName = loginBuffer.getString().trim();
+            if (typedName.length() > 0) {
+                userName = typedName;
+            }
+            isLoggedIn = true;
+            display.setCurrent(canvas);
+        } else if (c == sendCommand) {
             String msg = inputBuffer.getString();
             if (msg.length() > 0) {
                 canvas.addMessage(userName, msg);
@@ -64,7 +83,7 @@ public class Vincere extends MIDlet implements CommandListener {
 
             g.setColor(0x00FF00);
             g.setFont(Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_SMALL));
-            g.drawString("VINCERE // PUBLIC_CHAT", 5, 5, 0);
+            g.drawString("VINCERE // LOGGED_AS: " + userName.toUpperCase(), 5, 5, 0);
             g.drawLine(0, 20, w, 20);
 
             int y = h - 35;
@@ -72,7 +91,7 @@ public class Vincere extends MIDlet implements CommandListener {
             
             for (int i = messages.size() - 1; i >= 0; i--) {
                 String m = (String) messages.elementAt(i);
-                if (m.startsWith(userName)) {
+                if (m.startsWith(userName + ":")) {
                     g.setColor(0xFFFFFF);
                 } else {
                     g.setColor(0x00FF00);
@@ -85,7 +104,7 @@ public class Vincere extends MIDlet implements CommandListener {
             g.setColor(0x004400);
             g.fillRect(0, h - 15, w, 15);
             g.setColor(0x00FF00);
-            g.drawString("> Press any key to type...", 5, h - 14, 0);
+            g.drawString("> Press any key to message...", 5, h - 14, 0);
         }
 
         protected void keyPressed(int keyCode) {
