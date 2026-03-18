@@ -1,4 +1,3 @@
-#!/bin/bash
 JAVA="/usr/lib/jvm/java-8-openjdk/bin/java"
 JAVAC="/usr/lib/jvm/java-8-openjdk/bin/javac"
 JAR="/usr/lib/jvm/java-8-openjdk/bin/jar"
