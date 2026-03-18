@@ -6,17 +6,17 @@ public class Vincere extends MIDlet implements CommandListener {
     private Display display;
     private ChatCanvas canvas;
     private TextBox inputBuffer;
-    private Command sendCommand, exitCommand;
-    private String userName = "User"; 
+    private Command sendCommand, backCommand;
+    private String userName = "User";
 
     public Vincere() {
         display = Display.getDisplay(this);
         canvas = new ChatCanvas();
-        inputBuffer = new TextBox("Nachricht", "", 100, TextField.ANY);
-        sendCommand = new Command("Senden", Command.OK, 1);
-        exitCommand = new Command("Abbrechen", Command.BACK, 2);
+        inputBuffer = new TextBox("Message", "", 100, TextField.ANY);
+        sendCommand = new Command("Send", Command.OK, 1);
+        backCommand = new Command("Back", Command.BACK, 2);
         inputBuffer.addCommand(sendCommand);
-        inputBuffer.addCommand(exitCommand);
+        inputBuffer.addCommand(backCommand);
         inputBuffer.setCommandListener(this);
     }
 
@@ -32,7 +32,7 @@ public class Vincere extends MIDlet implements CommandListener {
                 inputBuffer.setString("");
             }
             display.setCurrent(canvas);
-        } else if (c == exitCommand) {
+        } else if (c == backCommand) {
             display.setCurrent(canvas);
         }
     }
@@ -42,13 +42,14 @@ public class Vincere extends MIDlet implements CommandListener {
 
     class ChatCanvas extends Canvas {
         private Vector messages = new Vector();
-        private int bgColor = 0x000000;
-        private int matrixGreen = 0x00FF00;
-        private int userColor = 0x00AA00;
+
+        public ChatCanvas() {
+            setFullScreenMode(true);
+        }
 
         public void addMessage(String user, String text) {
             messages.addElement(user + ": " + text);
-            if (messages.size() > 15) {
+            if (messages.size() > 20) {
                 messages.removeElementAt(0);
             }
             repaint();
@@ -58,15 +59,15 @@ public class Vincere extends MIDlet implements CommandListener {
             int w = getWidth();
             int h = getHeight();
 
-            g.setColor(bgColor);
+            g.setColor(0x000000);
             g.fillRect(0, 0, w, h);
 
-            g.setColor(matrixGreen);
-            g.drawLine(0, 25, w, 25);
+            g.setColor(0x00FF00);
             g.setFont(Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_SMALL));
-            g.drawString("VINCERE // PUBLIC_ROOM", 5, 5, Graphics.TOP | Graphics.LEFT);
+            g.drawString("VINCERE // PUBLIC_CHAT", 5, 5, 0);
+            g.drawLine(0, 20, w, 20);
 
-            int y = h - 40;
+            int y = h - 35;
             g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_PLAIN, Font.SIZE_SMALL));
             
             for (int i = messages.size() - 1; i >= 0; i--) {
@@ -74,17 +75,17 @@ public class Vincere extends MIDlet implements CommandListener {
                 if (m.startsWith(userName)) {
                     g.setColor(0xFFFFFF);
                 } else {
-                    g.setColor(matrixGreen);
+                    g.setColor(0x00FF00);
                 }
-                g.drawString(m, 5, y, Graphics.TOP | Graphics.LEFT);
-                y -= 18;
-                if (y < 30) break;
+                g.drawString(m, 5, y, 0);
+                y -= 15;
+                if (y < 25) break;
             }
 
-            g.setColor(userColor);
-            g.fillRect(0, h - 20, w, 20);
-            g.setColor(0x000000);
-            g.drawString("Druecke Taste zum Tippen...", 5, h - 18, Graphics.TOP | Graphics.LEFT);
+            g.setColor(0x004400);
+            g.fillRect(0, h - 15, w, 15);
+            g.setColor(0x00FF00);
+            g.drawString("> Press any key to type...", 5, h - 14, 0);
         }
 
         protected void keyPressed(int keyCode) {
