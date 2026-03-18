@@ -1,6 +1,6 @@
-MIDlet-Name: nChat
+MIDlet-Name: vincere
 MIDlet-Version: 1.0.0
 MIDlet-Vendor: Sonja
-MIDlet-1: nChat,,NChat
+MIDlet-1: vincere,,Vincere
 MicroEdition-Profile: MIDP-2.1
 MicroEdition-Configuration: CLDC-1.1
