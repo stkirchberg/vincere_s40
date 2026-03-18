@@ -1,11 +1,11 @@
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 
-public class vincere extends MIDlet {
+public class Vincere extends MIDlet {
     private Display display;
     private Form mainForm;
 
-    public vincere() {
+    public Vincere() {
         
     }
 
