@@ -1,16 +1,26 @@
 #!/bin/bash
-JAVA8="/usr/lib/jvm/java-8-openjdk/bin/java"
-JAVAC8="/usr/lib/jvm/java-8-openjdk/bin/javac"
-CP="/usr/share/java/microemulator/microemu-midp-api.jar"
+# Ersetze den gesamten Inhalt mit diesem Code:
 
-rm -rf bin
-mkdir -p bin
+# Pfade zu den Java 8 Tools
+JAVA="/usr/lib/jvm/java-8-openjdk/bin/java"
+JAVAC="/usr/lib/jvm/java-8-openjdk/bin/javac"
+JAR="/usr/lib/jvm/java-8-openjdk/bin/jar"
 
-# 1. Kompilieren (Wir kompilieren jetzt Vincere.java)
-$JAVAC8 -source 1.3 -target 1.3 -cp "$CP" -d bin src/vincere.java
+# Pfade zu den Nokia/Microemulator Libs (Pass diese an, falls sie woanders liegen)
+CP="/usr/share/java/microemulator/lib/midpapi20.jar:/usr/share/java/microemulator/lib/cldcapi11.jar"
 
-# 2. Jar packen (Die JAR heißt jetzt vincere.jar)
-jar cvfm vincere.jar manifest.mf -C bin .
+echo "--- Reinigung ---"
+rm -rf bin *.jar
+mkdir bin
 
-# 3. Emulator starten
-microemulator vincere.jar
+echo "--- Kompilieren ---"
+# Wir nutzen Vincere mit großem V
+$JAVAC -source 1.3 -target 1.3 -cp "$CP" -d bin src/Vincere.java
+
+echo "--- Verpacken ---"
+# Wir erstellen die vincere.jar
+$JAR cvfm vincere.jar manifest.mf -C bin .
+
+echo "--- Starten ---"
+# Wir starten den Emulator mit Java 8
+$JAVA -cp "/usr/share/java/microemulator/microemulator.jar:$CP" org.microemu.app.Main vincere.jar
