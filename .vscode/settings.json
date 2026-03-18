@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": [
+        "src"
+    ],
+    "java.project.referencedLibraries": [
+        "/usr/share/java/microemulator/lib/midpapi20.jar",
+        "/usr/share/java/microemulator/lib/cldcapi11.jar"
+    ]
+}
