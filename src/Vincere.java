@@ -13,22 +13,19 @@ public class Vincere extends MIDlet implements CommandListener {
     public Vincere() {
         display = Display.getDisplay(this);
         canvas = new ChatCanvas(this);
-        
         sendCommand = new Command("Send", Command.OK, 1);
         backCommand = new Command("Back", Command.BACK, 2);
         exitCommand = new Command("Exit", Command.EXIT, 3);
-        
         inputBuffer = new TextBox("Input", "", 50, TextField.ANY);
         inputBuffer.addCommand(sendCommand);
         inputBuffer.addCommand(backCommand);
         inputBuffer.setCommandListener(this);
-        
         canvas.addCommand(exitCommand);
         canvas.setCommandListener(this);
     }
 
     protected void startApp() {
-        if (display != null && canvas != null) {
+        if (display != null) {
             display.setCurrent(canvas);
         }
     }
